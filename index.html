@@ -1,0 +1,22 @@
+<html>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.js"></script>
+  <body ng-app="saddle_up">
+    <div ng-controller="main">
+      <div>
+        {{ raml_doc.title }}
+      </div>
+      <select ng-model="selectedEndpoint"
+	      ng-options="endpoint as endpoint.name for endpoint in endpoints"></select>
+      <button ng-click="executeQuery()">Do</button>
+      {{ baseUrl}}
+      <ul>
+        <li ng-repeat="(key, value) in baseUriParams">
+          {{key}}<input ng-model="value.value"/> {{value}}
+        </li>
+      </ul>
+    </div>
+
+    <script src="raml-parser.js"></script>
+    <script src="saddle_up.js"></script>
+  </body>
+</html>
