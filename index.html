@@ -5,9 +5,14 @@
       <div>
         {{ raml_doc.title }}
       </div>
+        <div ng-repeat="segment in raml_url">
+          <select ng-model="raml_url[$index+1]"
+                  ng-show="segment.options.length"
+          ng-options="endpoint.option as endpoint.name group by endpoint.type for endpoint in getSegmentOptions(segment)"></select>
+        </div>
+      <button ng-click="log()">get</button>
       <select ng-model="selectedEndpoint"
 	      ng-options="endpoint as endpoint.name for endpoint in endpoints"></select>
-      <button ng-click="executeQuery()">Do</button>
       {{ baseUrl}}
       <ul>
         <li ng-repeat="(key, value) in baseUriParams">

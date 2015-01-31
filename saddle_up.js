@@ -3,86 +3,25 @@ var saddle_up = angular.module("saddle_up", []);
 
 function main_ctl_fn($scope, $http, $q){
 
-  $scope.endpoints = [{
-    "name": "Get saddle_up javascript",
-    "method": "GET",
-    "url": "saddle_up.js",
-    "params": [{
-      "name": "param1",
-      "required": true,
-      "value": "hello"
-    }]
-  }];
-
-  $scope.selectedEndpoint = {};
-
   $scope.raml_doc = {};
   $scope.raml_url = [];
   $scope.baseUriParams = {};
   $scope.baseUrl = "";
 
-  function validateParameters(endpoint_object){
-    var is_valid = true;
-
-    angular.forEach(endpoint_object["params"], function(parameter_def){
-      if (parameter_def["required"] && !parameter_def["value"]){
-        is_valid = false;
-        return;
-      }
-    });
-
-    return is_valid;
-  }
-
-  function makeRequestObject(endpoint_object){
-    var params = {};
-    var requestObject = angular.copy(endpoint_object);
-
-    angular.forEach(endpoint_object["params"], function(parameter_def){
-      var key = parameter_def["name"];
-      var value = parameter_def["value"];
-      params[key] = value;
-    });
-
-    requestObject["params"] = params;
-    return requestObject;
+  $scope.log = function(){
+    console.log($scope.raml_url);
   }
 
   function logResponse(response){
     console.log(response);
   }
 
-  function executeQuery(){
-    if ( validateParameters($scope.selectedEndpoint) ){
-      requestObject = makeRequestObject($scope.selectedEndpoint);
-      $http(requestObject).then(
-        logResponse,
-        logResponse
-      );
-    }
-  };
-  $scope.executeQuery = executeQuery;
-
-  function getBaseURISelection(raml){
-    var parameters = [];
-    var param;
-    var regex = /\{(\w*)?\}/g;
-    var match;
-
-    while (match = regex.exec(raml.baseUri)){
-      param = {};
-      param["match"] = match;
-
-      parameters.push(match);
-      console.log(param);
-    }
-    return parameters;
-  }
 
   function updateBaseUri(parameters){
     var baseUri = $scope.raml_doc.baseUri;
     var regexp_template = "{key}";
     var regexp_base;
+
     angular.forEach(parameters, function(value, key){
       if (value.hasOwnProperty("value") && value.value){
         regexp_base = regexp_template.replace("key", key)
@@ -92,12 +31,54 @@ function main_ctl_fn($scope, $http, $q){
     $scope.baseUrl = baseUri;
   }
 
+  function getSegmentOptions(segment){
+    if (! segment.hasOwnProperty("options")){
+      segment.options = [];
+
+      if (segment.hasOwnProperty("resources")){
+        angular.forEach(segment.resources, function(resource){
+          segment.options.push({
+            "option": resource,
+            "name": resource.relativeUri,
+            "type": "Partial"
+            });
+        });
+      }
+
+      if (segment.hasOwnProperty("methods")){
+        angular.forEach(segment.methods, function(method){
+          segment.options.push({
+            "option": method,
+            "name": method.method,
+            "type": "Method"
+            });
+        });
+      }
+    }
+    
+    return segment.options;
+  }
+  $scope.getSegmentOptions = getSegmentOptions;
+
+  function ramlUrlUpdate(newRamlUrl, oldRamlUrl){
+    var oldRamlPartial = null;
+    angular.forEach(newRamlUrl, function(newRamlPartial, index){
+      oldRamlPartial = oldRamlUrl[index];
+      if (! angular.equals(newRamlPartial, oldRamlPartial) &&
+          angular.isDefined(oldRamlPartial)){
+        $scope.raml_url = newRamlUrl.slice(0, index + 1);
+        return;
+      }
+    });
+  }
+
   function processRAML(raml){
     $scope.raml_doc = raml;
     $scope.baseUri = raml.baseUri
-    baseURISelection = getBaseURISelection($scope.raml_doc);
     $scope.baseUriParams = raml.baseUriParameters;
     $scope.$watch("baseUriParams", updateBaseUri, true);
+    $scope.raml_url[0] = $scope.raml_doc;
+    $scope.$watch("raml_url", ramlUrlUpdate, true);
   }
 
   $q.when(RAML.Parser.loadFile('test.raml')).then( function(data) {
