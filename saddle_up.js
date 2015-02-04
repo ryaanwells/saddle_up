@@ -37,6 +37,29 @@ function main_ctl_fn($scope, $http, $q){
     $scope.baseUrl = baseUri;
   }
 
+  function updateFullUrl(){
+    $scope.fullUrl = $scope.raml_doc.baseUri;
+    var partial_string = "";
+    angular.forEach($scope.baseUriParameters, function(value, key){
+      if (value.hasOwnProperty("value") && value.value){
+        $scope.fullUrl = formatStringPartial($scope.fullUrl, key, value.value);
+      }
+    });
+
+    angular.forEach($scope.raml_url.slice(1), function(partial){
+      if (partial.type == "Method") { return; }
+      partial_string = partial.relativeUri;
+      if (partial.hasOwnProperty("uriParameters")){
+        angular.forEach(partial.uriParameters, function(value, key){
+          if (value.hasOwnProperty("value") && value.value){
+            partial_string = formatStringPartial(partial_string, key, value.value);
+          }
+        });
+      }
+      $scope.fullUrl = $scope.fullUrl + partial_string;
+    });
+  }
+
   function getSegmentOptions(segment){
     if (! segment.hasOwnProperty("options")){
       segment.options = [];
@@ -66,21 +89,23 @@ function main_ctl_fn($scope, $http, $q){
   }
   $scope.getSegmentOptions = getSegmentOptions;
 
-  function ramlUrlUpdate(newRamlUrl, oldRamlUrl){
+  function ramlUrlUpdate(newRamlUrl, oldRamlUrl, event){
     var oldRamlPartial = null;
     var queryElement = {};
     var currentElement = {};
+    var new_name = "";
+    var old_name = "";
 
     $scope.baseUriParameters = {};
     $scope.uriParameters = {};
     $scope.queryParameters = {};
 
     angular.forEach(newRamlUrl.slice(1), function(newRamlPartial, index){
-      oldRamlPartial = oldRamlUrl[index + 1];
-      if (! angular.equals(newRamlPartial, oldRamlPartial)
-          && angular.isDefined(oldRamlPartial)){
+      oldRamlPartial = oldRamlUrl[index + 1] || {};
+      new_name = newRamlPartial.relativeUri || newRamlPartial.method;
+      old_name = oldRamlPartial.relativeUri || newRamlPartial.method;
+      if (new_name !== old_name){
         $scope.raml_url = newRamlUrl.slice(0, index + 2);
-        return;
       }
     });
 
@@ -97,6 +122,7 @@ function main_ctl_fn($scope, $http, $q){
         angular.extend($scope.uriParameters, partial.uriParameters);
       }
     });
+    updateFullUrl();
   }
 
   function processRAML(raml){
