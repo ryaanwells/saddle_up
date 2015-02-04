@@ -1,22 +1,46 @@
 <html>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.js"></script>
+  <link href="saddle_up.css" rel="stylesheet" type="text/css"/>
   <body ng-app="saddle_up">
     <div ng-controller="main">
       <div>
         {{ raml_doc.title }}
       </div>
-        <div ng-repeat="segment in raml_url">
-          <select ng-model="raml_url[$index+1]"
-                  ng-show="segment.options.length"
-          ng-options="endpoint.option as endpoint.name group by endpoint.type for endpoint in getSegmentOptions(segment)"></select>
-        </div>
-      <button ng-click="log()">get</button>
-      <select ng-model="selectedEndpoint"
-	      ng-options="endpoint as endpoint.name for endpoint in endpoints"></select>
       {{ baseUrl}}
+      <ul class="inline-list">
+        <li ng-repeat="segment in raml_url"
+            ng-show="segment.options.length">
+          <select ng-model="raml_url[$index+1]"
+          ng-options="endpoint.option as endpoint.name group by endpoint.option.type for endpoint in getSegmentOptions(segment)"></select>
+        </li>
+      </ul>
+      <button ng-click="log()">get</button>
       <ul>
-        <li ng-repeat="(key, value) in baseUriParams">
-          {{key}}<input ng-model="value.value"/> {{value}}
+        <li ng-repeat="(key, value) in baseUriParameters">
+          {{key}}
+          <select ng-show="value.enum"
+                  ng-options="option for option in value.enum"
+                  ng-model="value.value"/>
+          <input ng-model="value.value"
+                 ng-hide="value.enum"/>
+          {{value}}
+        </li>
+      </ul>
+      <ul>
+        <li ng-repeat="(key, value) in uriParameters">
+          {{key}}
+          <select ng-show="value.enum"
+                  ng-options="option for option in value.enum"
+                  ng-model="value.value"/>
+          <input ng-model="value.value"
+                 ng-hide="value.enum"/>
+          {{value}}
+        </li>
+      </ul>
+      <ul>
+        <li ng-repeat="(key, value) in queryParameters">
+          {{key}}<input ng-model="value.value"/>
+          {{value}}
         </li>
       </ul>
     </div>

@@ -33,6 +33,9 @@ traits:
                   "required": [ "title", "artist" ]
                 }
             application/xml:
+      baseUriParameters:
+        bucketName:
+          enum: ["Ryan"]
     delete:
       description: |
         This method will *delete* an **individual song**
