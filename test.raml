@@ -15,8 +15,12 @@ traits:
     queryParameters:
       genre:
         description: filter the songs by genre
+        enum: ["rock"]
   post:
   /{songId}:
+    uriParameters:
+      songId:
+        enum: ["123"]
     get:
       responses:
         200:

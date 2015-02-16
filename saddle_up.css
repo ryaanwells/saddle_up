@@ -1,8 +1,35 @@
+.top-pad{
+  padding-top: 50px;
+}
+
 .inline-list {
   list-style-type: none;
   display: inline;
   padding: 0;
   margin: 0;
+}
+
+.final-corner-override {
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+
+.url-submit-valid {
+  cursor: pointer;
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+
+.url-submit-valid:hover{
+  cursor: pointer;
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+.inline-select {
+  width: auto !important;
 }
 
 .inline-list li {
