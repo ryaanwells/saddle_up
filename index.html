@@ -29,124 +29,85 @@
     <div class="container top-pad">
       <h3>{{ fullUrl }}</h3>
 
-  <form class="form-inline">
-    <div class="form-group">
-      <div class="input-group">
-        <div class="input-group-addon">{{ baseUrl }}</div>
-        <select ng-repeat="segment in raml_url"
-                class="form-control inline-select"
-                ng-model="raml_url[$index+1]"
-          ng-show="segment.options.length"
-          ng-options="endpoint.option as endpoint.name group by endpoint.option.type for endpoint in getSegmentOptions(segment)"></select>
-          <div class="input-group-addon"
-               ng-class="validateRequest() ? 'url-submit-valid': ''"
-               ng-click="makeRequest()">go!</div>
+      <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon">{{ baseUrl }}</div>
+            <select ng-repeat="segment in raml_url"
+                    class="form-control inline-select"
+                    ng-model="raml_url[$index+1]"
+                    ng-show="segment.options.length"
+                    ng-options="endpoint.option as endpoint.name group by endpoint.option.type for endpoint in getSegmentOptions(segment)"></select>
+            <div class="input-group-addon"
+                 ng-class="validateRequest() ? 'url-submit-valid': ''"
+                 ng-click="makeRequest()">go!</div>
+          </div>
+        </div>
+      </form>
+
+      <div class="row">
+        <div class="col-sm-3">
+          <h4>URI Parameters</h4>
+          <form class="form-horizontal">
+            <div class="form-group" ng-repeat="(key, value) in baseUriParameters">
+              <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
+              <div class="col-sm-8">
+                <select class="form-control"
+                        ng-show="value.enum"
+                        ng-options="option for option in value.enum"
+                        ng-model="value.value"></select>
+                <input class="form-control"
+                       name="{{key}}"
+                       required="{{value.required}}"
+                       ng-model="value.value"
+                       ng-hide="value.enum"/>
+              </div>
+            </div>
+            <div class="form-group" ng-repeat="(key, value) in uriParameters">
+              <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
+              <div class="col-sm-8">
+                <select class="form-control"
+                        ng-show="value.enum"
+                        ng-options="option for option in value.enum"
+                        ng-model="value.value"></select>
+                <input class="form-control"
+                       name="{{key}}"
+                       required="{{value.required}}"
+                       ng-model="value.value"
+                       ng-hide="value.enum"/>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-sm-3">
+          <h4>Query Parameters</h4>
+          <form class="form-horizontal">
+            <div class="form-group" ng-repeat="(key, value) in queryParameters">
+              <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
+              <div class="col-sm-8">
+                <select class="form-control"
+                        ng-show="value.enum"
+                        ng-options="option for option in value.enum"
+                        ng-model="value.value"></select>
+                <input class="form-control"
+                       name="{{key}}"
+                       required="{{value.required}}"
+                       ng-model="value.value"
+                       ng-hide="value.enum"/>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-sm-6">
         </div>
       </div>
-  </form>
-
-  <div class="row">
-    <div class="col-sm-3">
-      <h4>URI Parameters</h4>
-      <form class="form-horizontal">
-        <div class="form-group" ng-repeat="(key, value) in baseUriParameters">
-          <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
-          <div class="col-sm-8">
-            <select class="form-control"
-                    ng-show="value.enum"
-                    ng-options="option for option in value.enum"
-                    ng-model="value.value"></select>
-            <input class="form-control"
-                   name="{{key}}"
-                   required="{{value.required}}"
-                   ng-model="value.value"
-                   ng-hide="value.enum"/>
-          </div>
-        </div>
-        <div class="form-group" ng-repeat="(key, value) in uriParameters">
-          <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
-          <div class="col-sm-8">
-            <select class="form-control"
-            ng-show="value.enum"
-            ng-options="option for option in value.enum"
-            ng-model="value.value"></select>
-            <input class="form-control"
-            name="{{key}}"
-            required="{{value.required}}"
-            ng-model="value.value"
-            ng-hide="value.enum"/>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="col-sm-3">
-      <h4>Query Parameters</h4>
-      <form class="form-horizontal">
-        <div class="form-group" ng-repeat="(key, value) in queryParameters">
-          <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
-          <div class="col-sm-8">
-            <select class="form-control"
-            ng-show="value.enum"
-            ng-options="option for option in value.enum"
-            ng-model="value.value"></select>
-            <input class="form-control"
-            name="{{key}}"
-            required="{{value.required}}"
-            ng-model="value.value"
-            ng-hide="value.enum"/>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="col-sm-6">
+      <footer>
+        <hr/>
+        <p>SaddleUp - ryaanwells</p>
+      </footer>
     </div>
   </div>
-
-  <!-- <ul>
-    <li ng-repeat="(key, value) in baseUriParameters">
-      {{key}}
-      <select ng-show="value.enum"
-      ng-options="option for option in value.enum"
-      ng-model="value.value"/>
-
-      <input ng-model="value.value"
-      name="{{key}}"
-      required="{{value.required}}"
-      ng-hide="value.enum"/>
-      {{value}}
-    </li>
-  </ul>
-  <ul>
-    <li ng-repeat="(key, value) in uriParameters">
-      {{key}}
-      <select ng-show="value.enum"
-      ng-options="option for option in value.enum"
-      ng-model="value.value"/>
-      <input ng-model="value.value"
-      ng-hide="value.enum"/>
-      {{value}}
-    </li>
-  </ul>
-  <ul>
-    <li ng-repeat="(key, value) in queryParameters">
-      {{key}}
-      <select ng-show="value.enum"
-      ng-options="option for option in value.enum"
-      ng-model="value.value"/>
-      <input ng-model="value.value"
-      ng-hide="value.enum"/>
-      {{value}}
-    </li>
-  </ul> -->
-</div>
-</div>
-<div class="container">
-<footer>
-  <hr/>
-  <p>SaddleUp - ryaanwells</p>
-</footer>
-</div>
-<script src="raml-parser.js"></script>
-<script src="saddle_up.js"></script>
+  <script src="raml-parser.js"></script>
+  <script src="saddle_up.js"></script>
 </body>
 </html>
