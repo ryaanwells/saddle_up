@@ -11,7 +11,7 @@
   <link href="saddle_up.css" rel="stylesheet" type="text/css"/>
 </head>
 <body ng-app="saddle_up">
-  <div ng-controller="main">
+  <div ng-controller="saddle_up_ctl">
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -27,15 +27,14 @@
     </nav>
 
     <div class="container top-pad">
-      <h3>{{ fullUrl }}</h3>
-
       <form class="form-inline">
         <div class="form-group">
           <div class="input-group">
-            <div class="input-group-addon">{{ baseUrl }}</div>
+            <div class="input-group-addon white">{{ baseUrl }}</div>
             <select ng-repeat="segment in raml_url"
                     class="form-control inline-select"
                     ng-model="raml_url[$index+1]"
+                    ng-change="ramlUrlUpdate($index + 1)"
                     ng-show="segment.options.length"
                     ng-options="endpoint.option as endpoint.name group by endpoint.option.type for endpoint in getSegmentOptions(segment)"></select>
             <div class="input-group-addon"
@@ -44,13 +43,21 @@
           </div>
         </div>
       </form>
+      <h3>{{ fullUrl }}</h3>
+      <h2 class="emph-padding"><small><em>{{ endpointDescription }}</em></small></h2>
+      <hr/>
 
       <div class="row">
         <div class="col-sm-3">
           <h4>URI Parameters</h4>
           <form class="form-horizontal">
             <div class="form-group" ng-repeat="(key, value) in baseUriParameters">
-              <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
+              <label for="inputEmail3" class="col-sm-4 control-label">
+                {{key}}
+                <span class="glyphicon glyphicon-question-sign click" ng-show="value.description"
+                      popover="{{value.description}}" popover-trigger="click" popover-placement="bottom"
+                      popover-append-to-body="true"></span>
+              </label>
               <div class="col-sm-8">
                 <select class="form-control"
                         ng-show="value.enum"
@@ -64,7 +71,12 @@
               </div>
             </div>
             <div class="form-group" ng-repeat="(key, value) in uriParameters">
-              <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
+              <label for="inputEmail3" class="col-sm-4 control-label">
+                {{key}}
+                <span class="glyphicon glyphicon-question-sign click" ng-show="value.description"
+                      popover="{{value.description}}" popover-trigger="click" popover-placement="bottom"
+                      popover-append-to-body="true"></span>
+              </label>
               <div class="col-sm-8">
                 <select class="form-control"
                         ng-show="value.enum"
@@ -83,7 +95,12 @@
           <h4>Query Parameters</h4>
           <form class="form-horizontal">
             <div class="form-group" ng-repeat="(key, value) in queryParameters">
-              <label for="inputEmail3" class="col-sm-4 control-label">{{key}}</label>
+              <label for="inputEmail3" class="col-sm-4 control-label">
+                {{key}}
+                <span class="glyphicon glyphicon-question-sign click" ng-show="value.description"
+                      popover="{{value.description}}" popover-trigger="click" popover-placement="bottom"
+                      popover-append-to-body="true"></span>
+              </label>
               <div class="col-sm-8">
                 <select class="form-control"
                         ng-show="value.enum"
@@ -99,15 +116,18 @@
           </form>
         </div>
         <div class="col-sm-6">
+          <h4>Response</h4>
+          <pre class="pre-scrollable">{{ response | json}}</pre>
         </div>
       </div>
       <footer>
         <hr/>
-        <p>SaddleUp - ryaanwells</p>
+        <p>SaddleUp - <a href="https://twitter.com/ryaanwells">@ryaanwells</a></p>
       </footer>
     </div>
   </div>
   <script src="raml-parser.js"></script>
   <script src="saddle_up.js"></script>
+  <script src="ui-bootstrap-tpls-0.12.1.min.js"></script>
 </body>
 </html>

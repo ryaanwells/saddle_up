@@ -1,5 +1,9 @@
 .top-pad{
-  padding-top: 50px;
+  padding-top: 65px;
+}
+
+.input-group .white{
+  background-color: white;
 }
 
 .inline-list {
@@ -34,4 +38,12 @@
 
 .inline-list li {
   display: inline;
+}
+
+.click {
+  cursor: pointer;
+}
+
+.emph-padding {
+  padding: 0 20px;
 }

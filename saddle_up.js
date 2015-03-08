@@ -1,42 +1,25 @@
 
-var saddle_up = angular.module("saddle_up", []);
+var saddle_up = angular.module("saddle_up", ["ui.bootstrap"]);
 
-function main_ctl_fn($scope, $http, $q){
+function saddle_up_ctl($scope, $http, $q){
 
   $scope.raml_doc = {};
   $scope.raml_url = [];
+
   $scope.baseUriParameters = {};
   $scope.uriParameters = {};
   $scope.queryParameters = {};
+
   $scope.baseUrl = "";
   $scope.fullUrl = "";
+  $scope.endpointDescription = "";
+  $scope.response = {};
 
-  $scope.log = function(){
-    console.log($scope.raml_url);
-  }
-
-  function logResponse(response){
-    console.log(response);
-  }
 
   function formatStringPartial(input_string, key, value){
     var regexp_base = "{" + key + "}";
-    return input_string.replace(new RegExp(regexp_base), value);
+    return input_string.replace(new RegExp(regexp_base, 'g'), value);
   }
-
-  function updateBaseUri(parameters){
-    var baseUri = $scope.raml_doc.baseUri;
-    var regexp_template = "{key}";
-    var regexp_base;
-
-    angular.forEach(parameters, function(value, key){
-      if (value.hasOwnProperty("value") && value.value){
-        baseUri = formatStringPartial(baseUri, key, value.value);
-      }
-    });
-    $scope.baseUrl = baseUri;
-  }
-
 
   function updateFullUrl(){
     $scope.fullUrl = $scope.raml_doc.baseUri;
@@ -118,28 +101,20 @@ function main_ctl_fn($scope, $http, $q){
 
   }
 
-  function ramlUrlUpdate(newRamlUrl, oldRamlUrl, event){
-    var oldRamlPartial = null;
-    var currentElement = {};
-    var new_name = "";
-    var old_name = "";
-
+  function ramlUrlUpdate(index){
     $scope.baseUriParameters = {};
     $scope.uriParameters = {};
     $scope.queryParameters = {};
 
-    angular.forEach(newRamlUrl.slice(1), function(newRamlPartial, index){
-      oldRamlPartial = oldRamlUrl[index + 1] || {};
-      new_name = newRamlPartial.relativeUri || newRamlPartial.method;
-      old_name = oldRamlPartial.relativeUri || newRamlPartial.method;
-      if (new_name !== old_name){
-        $scope.raml_url = newRamlUrl.slice(0, index + 2);
-      }
-    });
+    if ( index < $scope.raml_url.length - 1 ){
+      $scope.raml_url = $scope.raml_url.slice(0, index + 1);
+    }
 
     updateParameterSelection();
     updateFullUrl();
+    $scope.endpointDescription = $scope.raml_url[$scope.raml_url.length - 1].description || "";
   }
+  $scope.ramlUrlUpdate = ramlUrlUpdate;
 
   function validateType(parameter){
     var typeMappings = {
@@ -187,28 +162,41 @@ function main_ctl_fn($scope, $http, $q){
     return projectedParameters;
   }
 
+  function success(response){
+    $scope.response = response.data;
+  }
+
+  function failure(response){
+    $scope.response = response.data || {};
+  }
+
   function makeRequest(){
     if (validateRequest()){
-      var request = {};
-      request["url"] = $scope.fullUrl;
-      request["method"] = $scope.raml_url[$scope.raml_url.length - 1].method;
-      request["data"] = projectParameters($scope.queryParameters);
-      console.log(request);
-      $http(request).then(logResponse, logResponse);
+      var request = {
+        "url": $scope.fullUrl,
+        "method": $scope.raml_url[$scope.raml_url.length - 1].method,
+        "data": projectParameters($scope.queryParameters)
+      };
+      if (request.method.toUpperCase() === "GET") { request["params"] = request.data; }
+
+      $scope.response = {};
+      $http(request).then(success, failure);
     }
   }
   $scope.makeRequest = makeRequest;
 
   function processRAML(raml){
     $scope.raml_doc = raml;
-    $scope.baseUri = raml.baseUri
+    $scope.baseUrl = raml.baseUri
     $scope.baseUriParameters = raml.baseUriParameters;
-    $scope.$watch("baseUriParameters", updateBaseUri, true);
     $scope.raml_url[0] = $scope.raml_doc;
-    $scope.$watch("raml_url", ramlUrlUpdate, true);
+    $scope.$watch("baseUriParameters", updateFullUrl, true);
+    $scope.$watch("uriParameters", updateFullUrl, true);
+    updateParameterSelection();
+    updateFullUrl();
   }
 
-  $q.when(RAML.Parser.loadFile('test.raml')).then( function(data) {
+  $q.when(RAML.Parser.loadFile('github-api-v3.raml')).then( function(data) {
     console.log(data);
     processRAML(data);
   }, function(error) {
@@ -217,5 +205,5 @@ function main_ctl_fn($scope, $http, $q){
 
 };
 
-main_ctl_fn.$inject = ["$scope", "$http", "$q"];
-saddle_up.controller("main", main_ctl_fn);
+saddle_up_ctl.$inject = ["$scope", "$http", "$q"];
+saddle_up.controller("saddle_up_ctl", saddle_up_ctl);
