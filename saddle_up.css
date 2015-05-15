@@ -2,6 +2,11 @@
   padding-top: 65px;
 }
 
+.app-body{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .input-group .white{
   background-color: white;
 }

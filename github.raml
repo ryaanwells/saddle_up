@@ -1,7 +1,7 @@
 #%RAML 0.8
 
-title: World Music API
-baseUri: http://{bucketName}.api.com/{version}/{bucketName}
+title: github API
+baseUri: https://api.github.com
 version: v1
 traits:
   - paged:
@@ -9,6 +9,14 @@ traits:
         pages:
           description: The number of pages to return
           type: number
+/repos:
+  /{user}:
+    /{repo}:
+      /issues:
+        get:
+          queryParameters:
+            state:
+
 /songs:
   is: [ paged ]
   get:
@@ -37,9 +45,6 @@ traits:
                   "required": [ "title", "artist" ]
                 }
             application/xml:
-      baseUriParameters:
-        bucketName:
-          enum: ["Ryan"]
     delete:
       description: |
         This method will *delete* an **individual song**

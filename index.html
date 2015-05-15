@@ -1,6 +1,7 @@
 <html lang="en">
 <!-- Latest compiled and minified CSS -->
 <head>
+  <title>Saddle Up - RAML Explorer!</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,19 +22,19 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">{{ raml_doc.title }}</a>
+          <a class="navbar-brand" href="#">{{ ramlDoc.title }}</a>
         </div>
       </div>
     </nav>
 
-    <div class="container top-pad">
+    <div class="app-body top-pad">
       <form class="form-inline">
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon white">{{ baseUrl }}</div>
-            <select ng-repeat="segment in raml_url"
+            <select ng-repeat="segment in ramlUrl"
                     class="form-control inline-select"
-                    ng-model="raml_url[$index+1]"
+                    ng-model="ramlUrl[$index+1]"
                     ng-change="ramlUrlUpdate($index + 1)"
                     ng-show="segment.options.length"
                     ng-options="endpoint.option as endpoint.name group by endpoint.option.type for endpoint in getSegmentOptions(segment)"></select>
@@ -46,6 +47,7 @@
       <h3>{{ fullUrl }}</h3>
       <h2 class="emph-padding"><small><em>{{ endpointDescription }}</em></small></h2>
       <hr/>
+      <button ng-click="printout()">get array</button>
 
       <div class="row">
         <div class="col-sm-3">
