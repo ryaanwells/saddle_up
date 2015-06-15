@@ -221,7 +221,7 @@ function saddle_up_ctl($scope, $http, $q, utils){
 
   function processRAML(raml){
     $scope.ramlDoc = raml;
-    $scope.baseUrl = raml.baseUri
+    $scope.baseUrl = raml.baseUri;
     $scope.baseUriParameters = raml.baseUriParameters;
     $scope.ramlUrl[0] = $scope.ramlDoc;
     $scope.$watch("baseUriParameters", updateFullUrl, true);
@@ -230,14 +230,14 @@ function saddle_up_ctl($scope, $http, $q, utils){
     updateFullUrl();
   }
 
-  $q.when(RAML.Parser.loadFile('github-api-v3.raml')).then( function(data) {
+  $q.when(RAML.Parser.loadFile('api.raml')).then( function(data) {
     console.log(data);
     processRAML(data);
   }, function(error) {
     console.log('Error parsing: ' + error);
   });
 
-};
+}
 
 saddle_up_ctl.$inject = ["$scope", "$http", "$q", "utils"];
 saddle_up.controller("saddle_up_ctl", saddle_up_ctl);
