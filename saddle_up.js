@@ -23,7 +23,7 @@ function utils(){
   function extendAndInitialize(dest, src){
     src = src || {};
     angular.forEach(src, function(value, key){
-      if (value.enum && !value.value){
+      if (value.enum && value.required && !value.value){
         value.value = value.enum[0];
       }
       this[key] = value
@@ -213,7 +213,7 @@ function saddle_up_ctl($scope, $http, $q, utils){
       };
       if (request.method.toUpperCase() === "GET") { request["params"] = request.data; }
 
-      $scope.response = {};
+      $scope.response = "Requesting...";
       $http(request).then(success, failure);
     }
   }
