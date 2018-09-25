@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div>
+        <label for="utid">UTID:</label>
+        <input type="text" id="utid" value="2ddde152-cd22-4e5a-a2c9-459a3c55b050"/>
+    </div>
+    <div>
+        <label for="timeline">Events:</label>
+        <textarea id="timeline" placeholder="typeinme" rows="10" cols="100"></textarea>
+    </div>
+    <button id="submit" onclick="submit()">Submit</button>
+    <div>
+        
+    </div>
+    
+    <script>
+    function submit(){
+        var body = {
+            utid: document.getElementById("utid").value,
+            user: {
+                userIds: [
+                    {
+                        "id": document.getElementById("utid").value,
+                        "type": "AUTH_UTID"
+                    }
+                ],
+                events: JSON.stringify(document.getElementById("timeline").value)
+            }
+        }
+        console.log(body);
+        fetch("http://localhost:5000/api/decide/debug", {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }).then((response) => {
+            console.log(response);
+        })
+    }
+    </script>
+</body>
+</html>

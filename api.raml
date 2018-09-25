@@ -1,0 +1,140 @@
+#%RAML 1.0
+title: "publisher-api"
+description: "Publisher API provides a RESTful interface for sending messages to users through a variety of communication channels"
+version: v2
+baseUri: https://publisher-api.slingshot.eu-west-1.sandbox.aws.skyscanner.local
+mediaType: application/json
+protocols: [HTTPS]
+securedBy: [apikey]
+securitySchemes:
+  apikey:
+    type: x-custom
+    description: Authentication by API key
+    describedBy:
+      headers:
+        apikey:
+          type: string
+          example: 9f7044b8-7958-4a74-af76-6706c5990f59
+      responses:
+        401:
+          description: Unauthorized
+
+types:
+  Culture:
+    type: object
+    properties:
+      market:
+        type: string
+        description: Lower-case market used for localising message
+        example: us
+      locale:
+        type: string
+        description: Lower-case locale used for localising message
+        example: en-us
+  Message:
+    type: object
+    properties:
+      type:
+        type: string
+        description: Type of communication
+        example: alert
+      utid:
+        type: string
+        description: Unique traveller identifier
+        pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        example: a75f0e6d-663d-4bcc-a7ce-28921e152398
+      email:
+        type: string
+        required: false
+        description: User email address for DBook communications
+        example: abc@gmail.com
+      culture:
+        type: Culture
+        description: Culture information for localising message
+      experimentVariantKeys:
+        type: string[]
+        required: false
+        description: Experiment string that gets added to tags in analytics
+        example: [TCS_Newsletter_NewsletterBackpack]
+      data:
+        type: object
+        description: Communication type specific data used when templating email
+        example: {
+          "PlaceCode": 11235,
+          "ImageUrl": "https://images.skyscnr.com/crosssell/content/images/countries/large/300x142_unitedkingdom_001.jpg",
+          "DeepLink": "/hotels/q?q=Edinburgh",
+          "DebugOptions": []
+        }
+      tags:
+        type: object
+        required: false
+        description: Reporting tags used for analytics
+        example: {
+          "campaignTemplateName": "newslettersignup"
+        }
+  Receipt:
+    type: object
+    properties:
+      success:
+        type: boolean
+        description: Message enqueued successfully
+      correlationId:
+        type: string
+        description: Unique send identifier
+      userId:
+        type: string
+        description: Unique traveller identifier
+  AuthorizationError:
+    type: object
+    properties:
+      code:
+        type: integer
+        description: HTTP status code
+      message:
+        type: string
+        description: Error description
+  ValidationError:
+    type: object
+    properties:
+      errors:
+        type: string[]
+        description: List of validation errors
+
+/v2/message:
+  post:
+    description: Send message to given user
+    body:
+      type: Message
+      description: Message to be sent
+    responses:
+      202:
+        description: Message successfully enqueued
+        body:
+          type: Receipt
+      401:
+        description: Authorization failed
+        body:
+          type: AuthorizationError
+      422:
+        description: Validation failed
+        body:
+          type: ValidationError
+  /{uuid}:
+    post:
+      description: Send message to given user
+      body:
+        type: Message
+        description: Message to be sent
+      responses:
+        202:
+          description: Message successfully enqueued
+          body:
+            type: Receipt
+        401:
+          description: Authorization failed
+          body:
+            type: AuthorizationError
+        422:
+          description: Validation failed
+          body:
+            type: ValidationError

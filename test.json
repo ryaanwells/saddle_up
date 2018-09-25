@@ -1,0 +1,169 @@
+{
+    "userIds": [
+        {
+            "id": "99da64c0-6e06-43e7-b23c-6a6d93ea9636",
+            "type": "AUTH_UTID"
+        }
+    ],
+    "events": [
+        {
+            "passengerInfo": {
+                "adultCount": 1,
+                "childCount": 0,
+                "studentCount": 0,
+                "infantCount": 0
+            },
+            "countryId": "UK",
+            "cabinClass": "ECONOMY",
+            "kind": "RETURN",
+            "legs": [
+                {
+                    "legNumber": 0,
+                    "travelOn": {
+                        "day": 6,
+                        "month": 10,
+                        "year": 2019,
+                        "granularity": "DAY"
+                    },
+                    "fromLocation": "GLA",
+                    "toLocation": "EDI"
+                }
+            ],
+            "eventType": "REDIRECT",
+            "eventDate": "2018-09-05T10:00:00Z",
+            "channelType": "APP",
+            "clientInfo": {
+                "osName": "Android",
+                "osVersion": "8.1.0"
+            }
+        },
+        {
+            "passengerInfo": {
+                "adultCount": 1,
+                "childCount": 0,
+                "studentCount": 0,
+                "infantCount": 0
+            },
+            "countryId": "UK",
+            "cabinClass": "ECONOMY",
+            "kind": "RETURN",
+            "legs": [
+                {
+                    "legNumber": 0,
+                    "travelOn": {
+                        "day": 6,
+                        "month": 10,
+                        "year": 2019,
+                        "granularity": "DAY"
+                    },
+                    "fromLocation": "GLA",
+                    "toLocation": "LHR"
+                }
+            ],
+            "eventType": "REDIRECT",
+            "eventDate": "2018-09-05T10:10:00Z",
+            "channelType": "APP",
+            "clientInfo": {
+                "osName": "Android",
+                "osVersion": "8.1.0"
+            }
+        },
+        {
+            "passengerInfo": {
+                "adultCount": 1,
+                "childCount": 0,
+                "studentCount": 0,
+                "infantCount": 0
+            },
+            "countryId": "UK",
+            "cabinClass": "ECONOMY",
+            "kind": "RETURN",
+            "legs": [
+                {
+                    "legNumber": 0,
+                    "travelOn": {
+                        "day": 6,
+                        "month": 10,
+                        "year": 2019,
+                        "granularity": "DAY"
+                    },
+                    "fromLocation": "GLA",
+                    "toLocation": "NYC"
+                }
+            ],
+            "eventType": "REDIRECT",
+            "eventDate": "2018-09-05T10:20:00Z",
+            "channelType": "APP",
+            "clientInfo": {
+                "osName": "Android",
+                "osVersion": "8.1.0"
+            }
+        },
+        {
+            "pageType": "HOME",
+            "countryId": "UK",
+            "eventType": "REQUEST",
+            "eventDate": "2018-09-06T10:05:00Z",
+            "channelType": "WEBSITE"
+        },
+        {
+            "communicationType": "campaign",
+            "template": "CityGuide-GLA-EDI",
+            "communicationMedium": "EMAIL",
+            "actionName": "DELIVERED",
+            "countryId": "UK",
+            "correlationId": "1b2b3db2-e5b5-4b62-a908-934cbf626b71",
+            "eventType": "COMMUNICATION",
+            "eventDate": "2018-09-06T10:30:00Z",
+            "stimulus": {
+                "source": "HotelsCrossSell",
+                "medium": "EMAIL"
+            },
+            "channelType": "WEBSITE"
+        },
+        {
+            "pageType": "HOME",
+            "countryId": "UK",
+            "eventType": "REQUEST",
+            "eventDate": "2018-09-13T10:35:00Z",
+            "channelType": "WEBSITE"
+        },
+        {
+            "communicationType": "campaign",
+            "template": "CityGuide-GLA-LHR",
+            "communicationMedium": "EMAIL",
+            "actionName": "DELIVERED",
+            "countryId": "UK",
+            "correlationId": "1b2b3db2-e5b5-4b62-a908-934cbf626b71",
+            "eventType": "COMMUNICATION",
+            "eventDate": "2018-09-13T10:40:00Z",
+            "stimulus": {
+                "source": "HotelsCrossSell",
+                "medium": "EMAIL"
+            },
+            "channelType": "WEBSITE"
+        },
+        {
+            "pageType": "HOME",
+            "countryId": "UK",
+            "eventType": "REQUEST",
+            "eventDate": "2018-09-20T10:45:00Z",
+            "channelType": "WEBSITE"
+        },
+        {
+            "communicationType": "campaign",
+            "template": "CityGuide-GLA-NYC",
+            "communicationMedium": "EMAIL",
+            "actionName": "DELIVERED",
+            "countryId": "UK",
+            "correlationId": "1b2b3db2-e5b5-4b62-a908-934cbf626b71",
+            "eventType": "COMMUNICATION",
+            "eventDate": "2018-09-20T10:50:00Z",
+            "stimulus": {
+                "source": "HotelsCrossSell",
+                "medium": "EMAIL"
+            },
+            "channelType": "WEBSITE"
+        }
+    ]
+}
